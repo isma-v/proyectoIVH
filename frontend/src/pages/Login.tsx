@@ -4,6 +4,7 @@ import * as React from 'react'
 import Alert from '@mui/material/Alert'
 import CheckIcon from '@mui/icons-material/Check';
 import {useState} from 'react'
+import { useNavigate } from "react-router-dom";
 
 function Login() {
 
@@ -40,7 +41,13 @@ function Login() {
         const valid = VerifyCredentials({user, passwd});
         setIsValid(valid);
         setHasSubmitted(true); 
+
+
+        isValid ? navigate("/home") : null;
     }
+
+
+    const navigate = useNavigate()
 
     return (
         <>
@@ -82,19 +89,7 @@ function Login() {
                     
                     <Button variant='contained' fullWidth type='submit'>Acceder</Button>
                     
-                    {hasSubmitted && (
-                        isValid? (
-                        <Alert sx={{width: "100%"}} icon={<CheckIcon fontSize="inherit"/>} severity="success">
-                         
-                            Acceso correcto
-                        </Alert>
-                    ): (
-                        <Alert severity="error">
-                            Usuario o contraseña incorrectos
-                        </Alert>
-                    )
-                        
-                    )}
+                    
                 </Box>
             </main>
 

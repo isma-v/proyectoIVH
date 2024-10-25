@@ -3,7 +3,7 @@ import Login from './pages/Login';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import Reports from './pages/Reports';
-
+import ErrorPage from './pages/ErrorPage';
 
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
+      errorElement: <ErrorPage/>,
       children: [
         {
           index: true,
@@ -23,7 +24,7 @@ function App() {
         {
           path: 'reports',
           element: <Reports />
-        }
+        },
       ]
     }
   ]);
