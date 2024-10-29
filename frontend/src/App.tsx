@@ -5,7 +5,6 @@ import Home from './pages/Home';
 import Reports from './pages/Reports';
 import ErrorPage from './pages/ErrorPage';
 
-
 function App() {
 
   const router = createBrowserRouter([

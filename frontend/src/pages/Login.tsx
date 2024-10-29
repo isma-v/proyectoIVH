@@ -6,7 +6,19 @@ import CheckIcon from '@mui/icons-material/Check';
 import {useState} from 'react'
 import { useNavigate } from "react-router-dom";
 
+
+//Importamos el useDispatch del react-redux
+import { useDispatch} from 'react-redux'
+//Importamos las acciones que están en el fichero authSlice.ts
+import { authActions } from '../store/authSlice';
+
 function Login() {
+
+    const dispatch = useDispatch()
+
+
+
+
 
     const bduser = 'ismael'
     const bdpasswd = '1234'
@@ -36,14 +48,19 @@ function Login() {
 
     const handleSubmit = (e: any) =>{
         e.preventDefault();
-        //Desestructurar las credenciales para pausarlas correctamente
+        //Desestructuramos las credenciales para pausarlas de forma correcta
         const {user, passwd} = credentials;
         const valid = VerifyCredentials({user, passwd});
         setIsValid(valid);
         setHasSubmitted(true); 
 
-
-        isValid ? navigate("/home") : null;
+        if (valid) {
+            dispatch(authActions.login({
+                name: user,
+                rol: 'invitado'
+                }));
+            navigate("/home");
+        }
     }
 
 
