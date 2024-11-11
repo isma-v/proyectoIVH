@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 //importo el fichero login.js que está en la carpeta services
 const login = require('./services/login')
+const items = require('./services/items')
 
 //Definimos el puerto por que va a escuchar nuestra API las peticiones
 const port  = 3030
@@ -41,7 +42,7 @@ app.get('/login', async function(req, res, next) {
 
 app.get('/addItem', async function(req, res, next) {
     try {
-    res.json(await login.insertData(req.query.nombre, req.query.tipo, req.query.marca, req.query.precio))
+    res.json(await items.insertData(req.query.nombre, req.query.tipo, req.query.marca, req.query.precio))
     } catch (err) {
     console.error(`Error while inserting items `, err.message);
     next(err);
@@ -52,25 +53,21 @@ app.get('/addItem', async function(req, res, next) {
 
     app.get('/getItems', async function(req, res, next) {
         try {
-            const items = await items.getData(req, );
-            res.json(items);
+            const colecciones = await items.getData(req, );
+            res.json(colecciones);
         } catch (err) {
             console.error(`Error while fetching items: `, err.message);
             next(err);
         }
     });
     
-    app.delete('/deleteItem', async function(req, res, next) {
+    app.get('/deleteItem', async function(req, res, next) {
         try {
             const { id } = req.query; 
             
-            const result = await login.deleteItem(id);
+            const result = await items.deleteData(id);
     
-            if (result === 0) {
-                res.json({ message: 'Item eliminado con éxito' });
-            } else {
-                res.status(400).json({ message: 'Error al eliminar el item' });
-            }
+            
         } catch (err) {
             console.error(`Error while deleting item: `, err.message);
             next(err);
