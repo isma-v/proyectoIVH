@@ -17,12 +17,6 @@ function Login() {
     const dispatch = useDispatch()
 
 
-
-
-
-    const bduser = 'ismael'
-    const bdpasswd = '1234'
-
     // useState para almacenar temporalmente las credenciales
 
     const [credentials, setCredentials] = useState({user: '', passwd: ''})
@@ -40,27 +34,33 @@ function Login() {
         });
     }
 
-    const VerifyCredentials = ({ user, passwd} : {user: string, passwd: string}) => {
-        //Lógica para verificar las credenciales
-        return user === bduser && passwd === bdpasswd; 
-    };
-
-
-    const handleSubmit = (e: any) =>{
-        e.preventDefault();
-        //Desestructuramos las credenciales para pausarlas de forma correcta
-        const {user, passwd} = credentials;
-        const valid = VerifyCredentials({user, passwd});
-        setIsValid(valid);
-        setHasSubmitted(true); 
-
-        if (valid) {
+    async function isVerifiedUser ({user, passwd}: any)  {
+        fetch(`http://localhost:3030/login?user=${user}&password=${passwd}`)
+        .then(response => response.json())
+        .then (response => {
+        console.log('Lo que nos llega de la base de datos: ')
+        console.log(response.data)
+        if (response.data.length !== 0){
             dispatch(authActions.login({
                 name: user,
                 rol: 'invitado'
                 }));
             navigate("/home");
+        } else{
+            alert("El usuario o la contraseña no son correctos");
         }
+        })
+    }
+        
+
+
+
+     const handleSubmit = async (e: any) =>{
+        e.preventDefault();
+        //Desestructuramos las credenciales para pausarlas de forma correcta
+        const {user, passwd} = credentials;
+    
+        isVerifiedUser({user, passwd});
     }
 
 

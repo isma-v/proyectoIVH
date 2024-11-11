@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import  { tableCellClasses } from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
+import { Api } from "@mui/icons-material";
 
 function Dashboard() {
 
@@ -49,7 +50,7 @@ function Dashboard() {
     const handleSubmit = (event: any) => {
         event.preventDefault();
         setOpen(true);
-        handleInsertClick(data);
+        insertarDatos();
         
     };
 
@@ -111,40 +112,31 @@ function Dashboard() {
       
       const rows: any = [];
       
+    
+      async function insertarDatos ()  {
+
+        fetch(`http://localhost:3030/addItem?nombre=${data.nombre}&marca=${data.marca}&tipo=${data.tipo}&precio=${data.precio}`)
+        .then(response => response.json())
+        .then (response => {
+        console.log('Lo que nos llega de la base de datos: ')
+        console.log(data)
+        if (response.length !== 0){
+          alert("datos insertados correctamente")
+        } else{
+            alert("Ha habido un error al insertar los datos ");
+        }
+        })
+    }
 
 
+  // creamos un useState para el contenido de la tabla
+    const [tableData, setTableData] = useState(api.getData)
 
-      async function handleInsertClick(data: itemtype ) {
-        try {
-            // Realizamos el fetch al endpoint /addItem
-            const response = await fetch('/addItem', {
-              method: 'POST', // Método HTTP que se usará
-              headers: {
-                'Content-Type': 'application/json' // Especificamos que vamos a enviar JSON
-              },
-              body: JSON.stringify({ data }) // Convertimos el array 'data' en una cadena JSON
-            });
-        
-            // Esperamos la respuesta
-            const result = await response.json();
-        
-            // Si la respuesta es 0, mostramos el mensaje de éxito
-            if (result === 0) {
-              alert('Datos guardados con éxito');
-            } else {
-              alert('Hubo un error al guardar los datos');
-            }
-          } catch (error) {
-            // Si ocurre un error con el fetch, lo mostramos en la consola
-            console.error('Error al insertar los datos:', error);
-            alert('Hubo un error al realizar la solicitud');
-          }
-      }
 
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <form onSubmit={handleSubmit}>
+            <form >
                 <Grid2 container spacing={1}>
                     <Grid2 size={{ xs: 3, sm: 3, md: 3, lg: 3 }}>
                         <TextField
@@ -199,7 +191,7 @@ function Dashboard() {
 
 
 
-                        <Button variant='contained' onSubmit={handleSubmit} type="submit" >
+                        <Button variant='contained' onClick={handleSubmit} type="submit" >
                            
                                 <AddIcon />
                           

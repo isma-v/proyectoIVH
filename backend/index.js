@@ -52,7 +52,7 @@ app.get('/addItem', async function(req, res, next) {
 
     app.get('/getItems', async function(req, res, next) {
         try {
-            const items = await login.getItems();
+            const items = await items.getData(req, );
             res.json(items);
         } catch (err) {
             console.error(`Error while fetching items: `, err.message);
