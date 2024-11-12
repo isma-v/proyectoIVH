@@ -119,7 +119,7 @@ function Dashboard() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <form>
+      <form style={{padding: 20}}>
         <Grid2 container spacing={1}>
           <Grid2 size={{ xs: 3, sm: 3, md: 3, lg: 3 }}>
             <TextField

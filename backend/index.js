@@ -64,8 +64,9 @@ app.get('/addItem', async function(req, res, next) {
     app.get('/deleteItem', async function(req, res, next) {
         try {
             const { id } = req.query; 
-            
-            const result = await items.deleteData(id);
+            res.json(await items.deleteData(id))
+
+        
     
             
         } catch (err) {
