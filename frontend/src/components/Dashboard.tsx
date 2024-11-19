@@ -11,6 +11,13 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
 import {getDatos, deleteItem} from "../api";
 
+//imports para el enrutamiento
+import { useNavigate } from "react-router-dom";
+import { RootState, AppDispatch } from '../store/index'
+import { useSelector, useDispatch } from 'react-redux'
+import { authActions, AuthState } from '../store/authSlice';
+import { Link } from "react-router-dom";
+
 function Dashboard() {
 
   interface itemtype {
@@ -97,6 +104,8 @@ function Dashboard() {
     } else {
       alert("Ha habido un error al insertar los datos");
     }
+
+    handleClear();
   };
 
   const [tableData, setTableData] = useState([]);
@@ -116,6 +125,15 @@ function Dashboard() {
   useEffect(() => {
     actualizarDatos(); // Este useEffect carga los datos iniciales
   }, []);
+
+
+
+
+
+  //obtencion del rol 
+
+
+  const userRol = useSelector((state: RootState) => state.authenticator.userRol);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -199,9 +217,11 @@ function Dashboard() {
                 <TableCell>{row.tipo}</TableCell>
                 <TableCell>{row.precio}</TableCell>
                 <TableCell>
+                  {userRol === "admin" ? 
                   <Button onClick={() => handleDeleteItem(row)}>
                     <DeleteForeverIcon />
                   </Button>
+                  : null}
                 </TableCell>
               </TableRow>
             ))}

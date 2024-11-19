@@ -32,7 +32,7 @@ function Menu() {
 
     const userName = useSelector((state: RootState) => state.authenticator.userName);
     const userRol = useSelector((state: RootState) => state.authenticator.userRol);
-
+alert(userRol)
 
 
 
@@ -98,16 +98,20 @@ function Menu() {
                                 </ListItemButton>
                             </ListItem>
                         </Link>
-                        <Link to={'/informes'} style={{ textDecoration: 'none', color: 'black' }}>
-                            <ListItem  disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                    <FeedIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Informes"} />
-                                </ListItemButton>
-                            </ListItem>
-                        </Link>
+                        {(userRol === "admin") ? 
+                        
+                        <Link to={'/reports'} style={{ textDecoration: 'none', color: 'black' }}>
+                        <ListItem  disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                <FeedIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={"Informes"} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Link>
+                    : null}
+                        
                         <Link to={'/ayuda'} style={{ textDecoration: 'none', color: 'black' }}>
                             <ListItem  disablePadding>
                                 <ListItemButton>

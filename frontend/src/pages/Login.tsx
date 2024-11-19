@@ -42,8 +42,8 @@ function Login() {
         console.log(response.data)
         if (response.data.length !== 0){
             dispatch(authActions.login({
-                name: user,
-                rol: 'invitado'
+                name: response.data.nombre,
+                rol: response.data.rol
                 }));
             navigate("/home");
         } else{
