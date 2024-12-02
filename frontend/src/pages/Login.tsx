@@ -69,8 +69,8 @@ function Login() {
     return (
         <>
             <header>
-                <Typography variant="h1" component="h2">
-                    Ismael Valerón Hernández
+                <Typography variant="h3" component="h2">
+                    Iniciar Sesión
                 </Typography>
                 <Typography variant="h5" component="h2">
                     Sistema de acceso

@@ -46,7 +46,6 @@ function Reports() {
   const getTableData = async () => {
     const response: any = await getDatos();
     setTableData(response);
-    alert(tableData);
 
   };
 

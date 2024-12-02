@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
-import {getDatos, deleteItem} from "../api";
+import {getDatos, deleteItem, getUserDatos} from "../api";
 
 //imports para el enrutamiento
 import { useNavigate } from "react-router-dom";
@@ -18,33 +18,33 @@ import { useSelector, useDispatch } from 'react-redux'
 import { authActions, AuthState } from '../store/authSlice';
 import { Link } from "react-router-dom";
 
-function Dashboard() {
+function FormularioGestion() {
 
   interface itemtype {
-    id?: number;
     nombre: string;
-    marca: string;
-    tipo: string;
-    precio: number;
+    login: string;
+    password: string;
+    rol: string;
+   
   }
 
   const itemInitialState: itemtype = {
     nombre: ' ',
-    marca: ' ',
-    tipo: ' ',
-    precio: 0,
+    login: ' ',
+    password: ' ',
+    rol: '',
   }
 
-  const [data, setData] = useState({
+  const [userData, setUserData] = useState({
     nombre: '',
-    marca: '',
-    tipo: '',
-    precio: 0,
+    login: '',
+    password: '',
+    rol: '',
   });
 
   const handleChange = (event: any) => {
     const { name, value, type, checked } = event.target;
-    setData((prevData) => ({
+    setUserData((prevData) => ({
       ...prevData,
       [name]: type === 'checkbox' ? checked : value,
     }));
@@ -56,11 +56,11 @@ function Dashboard() {
   };
 
   const handleClear = () => {
-    setData({
+    setUserData({
       nombre: '',
-      marca: '',
-      tipo: '',
-      precio: 0,
+      login: '',
+      password: '',
+      rol: '',
     });
   };
 
@@ -97,12 +97,12 @@ function Dashboard() {
   const rows: any = [];
 
   const insertarDatos = async () => {
-    const response = await fetch(`http://localhost:3030/addItem?nombre=${data.nombre}&marca=${data.marca}&tipo=${data.tipo}&precio=${data.precio}`);
+    const response = await fetch(`http://localhost:3030/addUser?nombre=${userData.nombre}&login=${userData.login}&password=${userData.password}&rol=${userData.rol}`);
     const result = await response.json();
     if (result.length !== 0) {
       await actualizarDatos(); // Llamada para actualizar datos después de insertar
     } else {
-      alert("Ha habido un error al insertar los datos");
+      alert("Ha habido un error al registrar el usuario");
     }
 
     handleClear();
@@ -110,16 +110,13 @@ function Dashboard() {
 
   const [tableData, setTableData] = useState([]);
 
-  const handleDeleteItem = async (row: itemtype) => {
-    if (row.id !== undefined) {
-      await deleteItem(row.id);
-      await actualizarDatos(); // Llamada para actualizar datos después de eliminar
-    }
-  };
+
 
   const actualizarDatos = async () => {
-    const response: any = await getDatos();
+    const response: any = await getUserDatos();
+
     setTableData(response);
+
   };
 
   useEffect(() => {
@@ -137,8 +134,10 @@ function Dashboard() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <form style={{padding: 20}}>
+      <form style={{padding: 20}} onSubmit={handleSubmit}>
+        
         <Grid2 container spacing={1}>
+  
           <Grid2 size={{ xs: 3, sm: 3, md: 3, lg: 3 }}>
             <TextField
               id="nombre"
@@ -147,50 +146,50 @@ function Dashboard() {
               variant="outlined"
               fullWidth
               required
-              value={data.nombre}
+              value={userData.nombre}
               onChange={handleChange}
             />
           </Grid2>
           <Grid2 size={{ xs: 3, sm: 3, md: 3, lg: 3 }}>
             <TextField
-              id="marca"
-              name="marca"
-              label="Marca"
+              id="login"
+              name="login"
+              label="login"
               variant="outlined"
               fullWidth
               required
-              value={data.marca}
+              value={userData.login}
               onChange={handleChange}
             />
           </Grid2>
           <Grid2 size={{ xs: 3, sm: 3, md: 3, lg: 3 }}>
             <TextField
-              id="tipo"
-              name="tipo"
-              label="Tipo"
+              id="password"
+              name="password"
+              label="password"
               variant="outlined"
               fullWidth
               required
-              value={data.tipo}
+              type="password"
+              value={userData.password}
               onChange={handleChange}
             />
           </Grid2>
           <Grid2 size={{ xs: 3, sm: 3, md: 3, lg: 3 }}>
             <TextField
-              id="precio"
-              name="precio"
-              label="Precio"
+              id="rol"
+              name="rol"
+              label="rol"
               variant="outlined"
               fullWidth
               required
-              type="number"
-              value={data.precio}
+              value={userData.rol}
               onChange={handleChange}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
           <Tooltip title="Enviar" arrow>
-            <Button variant='contained' onClick={handleSubmit} type="submit">
+            <Button variant='contained' type="submit">
               <AddIcon />
               <Typography variant="h6" color="inherit" component="div">
                 Insertar
@@ -205,28 +204,21 @@ function Dashboard() {
           <TableHead>
             <TableRow>
               <StyledTableCell>Nombre</StyledTableCell>
-              <StyledTableCell>Marca</StyledTableCell>
-              <StyledTableCell>Tipo</StyledTableCell>
-              <StyledTableCell>Precio</StyledTableCell>
+              <StyledTableCell>Login</StyledTableCell>
+              <StyledTableCell>Password</StyledTableCell>
+              <StyledTableCell>Rol</StyledTableCell>
               <StyledTableCell>Acciones</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {tableData.map((row: itemtype) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.nombre}>
                 <TableCell>{row.nombre}</TableCell>
-                <TableCell>{row.marca}</TableCell>
-                <TableCell>{row.tipo}</TableCell>
-                <TableCell>{row.precio}</TableCell>
-                <TableCell>
-                  {userRol === "admin" ? 
-                  <Tooltip title="Delete" arrow>
-                  <Button onClick={() => handleDeleteItem(row)}>
-                    <DeleteForeverIcon />
-                  </Button>
-                  </Tooltip>
-                  : null}
-                </TableCell>
+                <TableCell>{row.login}</TableCell>
+                <TableCell>{row.password}</TableCell>
+                <TableCell>{row.rol}</TableCell>
+                <TableCell></TableCell>
+
               </TableRow>
             ))}
           </TableBody>
@@ -236,4 +228,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default FormularioGestion;

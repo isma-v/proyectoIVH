@@ -74,5 +74,29 @@ app.get('/addItem', async function(req, res, next) {
             next(err);
         }
     });
+
+
+    //users
+
+    app.get('/addUser', async function(req, res, next) {
+        try {
+        res.json(await items.insertUser(req.query.nombre, req.query.login, req.query.password, req.query.rol))
+        } catch (err) {
+        console.error(`Error registrando usuario `, err.message);
+        next(err);
+        }
+        })
+
+        
+    app.get('/getUsers', async function(req, res, next) {
+        try {
+            const usuarios = await items.getUserData(req, );
+            res.json(usuarios);
+        } catch (err) {
+            console.error(`Error while fetching items: `, err.message);
+            next(err);
+        }
+    })
+        
 app.listen(port)
 console.log('API escuchando en el puerto ' + port)

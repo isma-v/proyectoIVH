@@ -1,6 +1,11 @@
-import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Tooltip, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+
+//iconos para el rol
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import AdbIcon from '@mui/icons-material/Adb'
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon'
+
 
 //imports para el enrutamiento
 import { useNavigate } from "react-router-dom";
@@ -14,12 +19,15 @@ import HomeIcon from '@mui/icons-material/Home';
 import FeedIcon from '@mui/icons-material/Feed';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HelpIcon from '@mui/icons-material/Help';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 import { useState } from "react";
 
 
 //useEffect
 
 import { useEffect } from 'react'
+import { Adb } from "@mui/icons-material";
 
 function Menu() {
 
@@ -32,7 +40,6 @@ function Menu() {
 
     const userName = useSelector((state: RootState) => state.authenticator.userName);
     const userRol = useSelector((state: RootState) => state.authenticator.userRol);
-alert(userRol)
 
 
 
@@ -40,6 +47,7 @@ alert(userRol)
     const handleLogout = () => {
 
         dispatch(authActions.logout())
+     
 
     }
     const navigate = useNavigate()
@@ -75,7 +83,22 @@ alert(userRol)
                         {userName}
                     </Typography>
                     <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-                        <AdminPanelSettingsIcon />
+                        
+                        { userRol === "admin" 
+                        ?
+                          <AdminPanelSettingsIcon />
+
+                          :
+
+                          userRol === "user" ?
+
+
+                          <AdbIcon />
+
+                          :
+
+                          <InsertEmoticonIcon/>
+                    }
                     </IconButton>
                 </Toolbar>
             </AppBar>
@@ -90,46 +113,75 @@ alert(userRol)
                
                         <Link to={'/home'} style={{ textDecoration: 'none', color: 'black' }}>
                             <ListItem disablePadding>
+                            <Tooltip title="ListarInicio" arrow>
+
                                 <ListItemButton>
                                     <ListItemIcon>
                                     <HomeIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Inicio"} />
                                 </ListItemButton>
+                            </Tooltip>
                             </ListItem>
                         </Link>
                         {(userRol === "admin") ? 
-                        
+                        <>
                         <Link to={'/reports'} style={{ textDecoration: 'none', color: 'black' }}>
                         <ListItem  disablePadding>
+                            <Tooltip title="ListarInformes" arrow>
+
                             <ListItemButton>
                                 <ListItemIcon>
                                 <FeedIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={"Informes"} />
                             </ListItemButton>
+                            </Tooltip>
                         </ListItem>
                     </Link>
+
+                    <Link to={'/gestion'} style={{ textDecoration: 'none', color: 'black' }}>
+                    <ListItem  disablePadding>
+
+                    <Tooltip title="GestionUsuarios" arrow>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <SettingsIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary={"Gestión Usuarios"} />
+                        </ListItemButton>
+                        </Tooltip>
+
+                    </ListItem>
+                    </Link>
+                    </>
                     : null}
                         
-                        <Link to={'/ayuda'} style={{ textDecoration: 'none', color: 'black' }}>
+                        <Link to="/Manual_Usuario.pdf" target="_blank" style={{ textDecoration: 'none', color: 'black' }}>
                             <ListItem  disablePadding>
+                            <Tooltip title="ListarAyuda" arrow>
+
                                 <ListItemButton>
                                     <ListItemIcon>
                                     <HelpIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Ayuda"} />
                                 </ListItemButton>
+                                </Tooltip>
                             </ListItem>
                         </Link>
+                       
                         <Link to={'/'} style={{ textDecoration: 'none', color: 'black' }} onClick={handleLogout}>
                             <ListItem  disablePadding>
+                            <Tooltip title="ListarSalir" arrow>
+
                                 <ListItemButton>
                                     <ListItemIcon>
                                     <LogoutIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Salir"} />
                                 </ListItemButton>
+                                </Tooltip>
                             </ListItem>
                         </Link>
 
