@@ -1,12 +1,13 @@
 import { Button } from "@mui/material";
 import Menu from "../components/Menu";
 import { useEffect, useState } from "react";
-import { getDatos } from "../api";
+import { getDatos, getUserDatos } from "../api";
 import InformeColeccion from "../components/InformeColeccion";
+import InformeUsuario from "../components/InformeUsuario";
 
 function Reports() {
 
-    
+    //COLECCION
   interface itemtype {
     id?: number;
     nombre: string;
@@ -61,8 +62,66 @@ function Reports() {
         setClicked(!isClicked);
     }
 
-    //variable para controlar si se ha clickado
+     //variable para controlar si se ha clickado
   const [isClicked, setClicked] = useState(false)
+    //USUARIO
+  interface itemtypeUser {
+    id?: number;
+    nombre: string;
+    login: string;
+    password: string;
+    rol: string;
+  }
+
+  const itemInitialStateUser: itemtypeUser = {
+    nombre: ' ',
+    login: ' ',
+    password: ' ',
+    rol: '',
+  }
+
+  const [dataUserUser, setDataUserUser] = useState({
+    nombre: '',
+    login: '',
+    tipo: '',
+    rol: 0,
+  });
+
+
+ 
+
+  const [itemUser, setItemUser] = useState(itemInitialStateUser);
+
+
+
+  const rowsUser: any = [];
+
+
+
+  const [tableDataUser, setTableDataUser] = useState([]);
+
+
+  const getTableDataUser = async () => {
+    const responseUser: any = await getUserDatos();
+    setTableDataUser(responseUser);
+
+  };
+
+  useEffect(() => {
+
+    getTableDataUser(); // Este useEffect carga los datos iniciales
+  }, []);
+
+
+
+
+    const handleGenerateUserInform = () => {
+      getUserDatos();
+        setClickedUser(!isClickedUser);
+    }
+
+    //variable para controlar si se ha clickado
+  const [isClickedUser, setClickedUser] = useState(false)
     return ( 
        
         <div>
@@ -75,6 +134,15 @@ function Reports() {
             </Button>
             { isClicked ? 
             <InformeColeccion tableData={tableData}/>  
+            : null
+            }
+
+
+            <Button sx={{margin: 10}} onClick={() => handleGenerateUserInform()}>
+                INFORME USUARIO
+            </Button>
+            { isClickedUser ? 
+            <InformeUsuario tableDataUser={tableDataUser}/>  
             : null
             }
         </div>

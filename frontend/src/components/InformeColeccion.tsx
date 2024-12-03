@@ -17,14 +17,6 @@ interface itemtype {
 
 
   function InformeColeccion({ tableData }: { tableData: itemtype[] }) {
-// --> definición de las columnas de la tabla
-  //Para cada elemento que queremos mostrar tendremos el title y el field
-  //Será un array del tipo Column (tipo de material-table-core que importamos arriba) cuyos
-  //elementos son del tipo IPerson que definimos nosotros.
-  //El title contendrá el título de la columna de la tabla que es lo que veremos en la interfaz
-  //El field contendrá el nombre que le damos a ese campo en la tabla
-  //Por ejemplo: tendremos una columna con el title Nombre cuyo campo se llamará firstName
-  //Podemos indicar también el type y decir que es numérico, como en el caso del año nacimiento
   const col: Array<Column<itemtype>> = [
     { title: "Nombre", field: "nombre", filtering: false, },
     { title: "Marca", field: "marca", filtering: true },
@@ -32,15 +24,7 @@ interface itemtype {
     { title: "Precio", field: "precio", type: "numeric", filtering: false },
   ];
 
-// --> definición de los datos de la tabla
-    //Datos que se van a mostrar en la tabla para el informe: aquí hemos puesto tres filas de la tabla, 
-    //pero podemos poner tantas como queramos o necesitemos
-    //En una aplicación real estos datos vendrían de una consulta a la base de datos
- 
 
-/*Para mostrar los datos en la tabla uso el componente <MaterialTable/> de la librería @material-table/core, 
-pasándole como props: columns y data. A columns le doy el valor de la variable col que definí antes
-y a data le doy el valor de la variable tableData*/
 return (
   <MaterialTable 
     columns={col} 
